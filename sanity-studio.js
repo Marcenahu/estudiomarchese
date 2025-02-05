@@ -32,8 +32,6 @@ const showOnPage = (content, colection) => {
     document.getElementById("heroImage").src = makeImgUrl(
       content[0].image.asset._ref
     );
-    dataElement.classList.add("show");
-    loadingElement.style.display = "none";
   }
   if (colection === "services") {
     content.forEach((service) => {
@@ -92,6 +90,8 @@ const showOnPage = (content, colection) => {
       anchor.appendChild(text);
       contactContainer.appendChild(anchor);
     });
+    dataElement.classList.add("show");
+    loadingElement.style.display = "none";
   }
 };
 

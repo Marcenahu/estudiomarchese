@@ -253,7 +253,7 @@ svg path {
 }
 .textContainer ul {
   text-align: left;
-  font-size: var(--font-smaller);
+  font-size: var(--font-small);
 }
 .textContainer li {
   margin: 1rem 0;
