@@ -22,7 +22,7 @@ function makeImgUrl(ref) {
   const id = parts[1];
   const dimentions = parts[2];
   const format = parts[3];
-  return `https://cdn.sanity.io/images/${studioId}/${studioDataset}/${id}-${dimentions}.${format}`;
+  return `https://cdn.sanity.io/images/${studioId}/${studioDataset}/${id}-${dimentions}.${format}?fm=webp`;
 }
 
 const showOnPage = (content, colection) => {
