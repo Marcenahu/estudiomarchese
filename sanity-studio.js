@@ -64,17 +64,11 @@ const writeOnPage = (content, writeOn) => {
     content[1].result.forEach((service) => {
       const card = document.createElement("div");
       card.classList.add("card");
-      if (window.innerWidth <= 1200) {
-        const image = document.createElement("img");
-        image.loading = "lazy";
-        image.classList.add("serviceImage");
-        image.src = makeImgUrl(service.image.asset._ref);
-        card.appendChild(image);
-      } else {
-        card.style.backgroundImage = `url('${makeImgUrl(
-          service.image.asset._ref
-        )}')`;
-      }
+      const image = document.createElement("img");
+      image.loading = "lazy";
+      image.classList.add("serviceImage");
+      image.src = makeImgUrl(service.image.asset._ref);
+      card.appendChild(image);
       const textContainer = document.createElement("div");
       textContainer.classList.add("textContainer");
       card.appendChild(textContainer);

@@ -71,7 +71,7 @@ body::-webkit-scrollbar-thumb {
 }
 .fade-in {
   opacity: 0;
-  transition: opacity 0.8s;
+  transition: opacity 0.4s;
 }
 .show {
   opacity: 1;
@@ -220,36 +220,33 @@ svg path {
 }
 #services {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-evenly;
   gap: 4rem;
-}
-.serviceImage {
-  display: none;
 }
 .card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  min-height: 22rem;
-  padding: 4rem 4rem;
-  background-position-x: center;
-  background-position-y: -4rem;
-  background-repeat: no-repeat;
-  background-size: cover;
+  max-width: 30rem;
+  background-color: white;
   border-radius: 4rem;
+  overflow: hidden;
 }
-.card:nth-child(even) {
-  justify-content: flex-end;
+.serviceImage {
+  width: 100%;
+  height: auto;
 }
 .textContainer {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border-radius: 3rem;
-  padding: 2rem;
+  border-radius: 0;
+  padding: 1rem 0;
   font-weight: 600;
-  width: 30rem;
+  width: 80%;
   height: fit-content;
-  background-color: white;
 }
 .textContainer ul {
   text-align: left;
@@ -302,35 +299,6 @@ svg path {
     --font-medium: 1.1rem;
     --font-large: 1.4rem;
     --font-xlarge: 2rem;
-  }
-  #services {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 2rem;
-  }
-  .serviceImage {
-    display: block;
-  }
-  .card {
-    max-width: 30rem;
-    flex-direction: column;
-    padding: 0;
-    overflow: hidden;
-    gap: 0rem;
-    align-items: flex-end;
-    background-color: white;
-    align-items: center;
-  }
-  .textContainer {
-    border-radius: 0;
-    padding: 1rem 0;
-    width: 80%;
-  }
-  .serviceImage {
-    width: 100%;
-    height: auto;
   }
   .footer {
     padding: 2rem 1rem;
