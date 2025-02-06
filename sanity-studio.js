@@ -1,41 +1,67 @@
 const studioId = "q6gigotc";
 const studioDataset = "production";
-const loadingElement = document.getElementById("loading");
-const dataElement = document.getElementById("data");
-const getDataFromStudio = (colection, order = "") => {
-  const query = encodeURIComponent(`*[_type == "${colection}"]${order}`);
-  const url = `https://${studioId}.api.sanity.io/v2021-10-21/data/query/${studioDataset}?query=${query}`;
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      showOnPage(data.result, colection);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      loadingElement.style.display = "none";
-      dataElement.innerHTML = "<p>Error al cargar los datos.</p>";
-    });
+const cacheData = localStorage.getItem("sanityData") || [];
+const cacheTime = localStorage.getItem("cacheTime");
+const now = Date.now();
+
+const fetchData = async () => {
+  try {
+    const response1 = await fetch(
+      `https://${studioId}.api.sanity.io/v2021-10-21/data/query/${studioDataset}?query=${encodeURIComponent(
+        `*[_type == "principal"]`
+      )}`
+    );
+    const data = await response1.json();
+    cacheData.push(data);
+    writeOnPage(cacheData, "principal");
+
+    const response2 = await fetch(
+      `https://${studioId}.api.sanity.io/v2021-10-21/data/query/${studioDataset}?query=${encodeURIComponent(
+        `*[_type == "services"] | order(_createdAt asc)`
+      )}`
+    );
+    const data2 = await response2.json();
+    cacheData.push(data2);
+    writeOnPage(cacheData, "services");
+
+    const response3 = await fetch(
+      `https://${studioId}.api.sanity.io/v2021-10-21/data/query/${studioDataset}?query=${encodeURIComponent(
+        `*[_type == "contact"] | order(_createdAt asc)`
+      )}`
+    );
+    const data3 = await response3.json();
+    cacheData.push(data3);
+    writeOnPage(cacheData, "contact");
+
+    localStorage.setItem("sanityData", JSON.stringify(cacheData));
+    localStorage.setItem("cacheTime", now);
+    return;
+  } catch (error) {
+    console.error("Error:", error);
+    document.getElementById("heroLoader").style.display = "none";
+    document.getElementById("servicesLoader").style.display = "none";
+    document.getElementById("contactLoader").style.display = "none";
+    document.getElementsByTagName("main").innerHTML =
+      "<p>Error al cargar los datos.</p>";
+  }
 };
 
-function makeImgUrl(ref) {
-  const parts = ref.split("-");
-  const id = parts[1];
-  const dimentions = parts[2];
-  const format = parts[3];
-  const optimizedSize = window.innerWidth <= 800 ? "&w=600" : "";
-  return `https://cdn.sanity.io/images/${studioId}/${studioDataset}/${id}-${dimentions}.${format}?fm=webp${optimizedSize}`;
-}
-
-const showOnPage = (content, colection) => {
-  if (colection === "principal") {
-    document.getElementById("heroTitle").innerHTML = content[0].title;
-    document.getElementById("heroSubtitle").innerHTML = content[0].subtitle;
+const writeOnPage = (content, writeOn) => {
+  if (writeOn == "all" || writeOn == "principal") {
+    document.getElementById("heroTitle").innerHTML = content[0].result[0].title;
+    document.getElementById("heroSubtitle").innerHTML =
+      content[0].result[0].subtitle;
     document.getElementById("heroImage").src = makeImgUrl(
-      content[0].image.asset._ref
+      content[0].result[0].image.asset._ref,
+      true
     );
+    document.getElementById("heroImage").onload = function () {
+      document.getElementById("heroLoader").style.display = "none";
+      document.getElementById("hero").classList.add("show");
+    };
   }
-  if (colection === "services") {
-    content.forEach((service) => {
+  if (writeOn == "all" || writeOn == "services") {
+    content[1].result.forEach((service) => {
       const card = document.createElement("div");
       card.classList.add("card");
       if (window.innerWidth <= 1200) {
@@ -64,10 +90,12 @@ const showOnPage = (content, colection) => {
       textContainer.appendChild(list);
       document.getElementById("services").appendChild(card);
     });
+    document.getElementById("servicesLoader").style.display = "none";
+    document.getElementById("servicesContainer").classList.add("show");
   }
-  if (colection === "contact") {
+  if (writeOn == "all" || writeOn == "contact") {
     const contactContainer = document.getElementById("contact");
-    content.forEach((contact) => {
+    content[2].result.forEach((contact) => {
       const value = contact.value;
       const anchor = document.createElement("a");
       anchor.classList.add("button");
@@ -92,12 +120,29 @@ const showOnPage = (content, colection) => {
       anchor.appendChild(text);
       contactContainer.appendChild(anchor);
     });
-    dataElement.classList.add("show");
-    loadingElement.style.display = "none";
+    document.getElementById("contactLoader").style.display = "none";
+    document.getElementById("contactContainer").classList.add("show");
   }
 };
 
-loadingElement.style.display = "block";
-getDataFromStudio("principal");
-getDataFromStudio("services", " | order(_createdAt asc)");
-getDataFromStudio("contact", " | order(_createdAt asc)");
+const renderOnPage = async () => {
+  document.getElementById("heroLoader").style.display = "block";
+  document.getElementById("servicesLoader").style.display = "block";
+  document.getElementById("contactLoader").style.display = "block";
+  if (!cacheData || !cacheTime || now - cacheTime > 604800000)
+    await fetchData();
+  else writeOnPage(JSON.parse(cacheData), "all");
+};
+
+renderOnPage();
+
+// utility functions
+
+function makeImgUrl(ref, reduced) {
+  const parts = ref.split("-");
+  const id = parts[1];
+  const dimentions = parts[2];
+  const format = parts[3];
+  const optimizedSize = window.innerWidth <= 800 || reduced ? "&w=600" : "";
+  return `https://cdn.sanity.io/images/${studioId}/${studioDataset}/${id}-${dimentions}.${format}?fm=webp${optimizedSize}`;
+}

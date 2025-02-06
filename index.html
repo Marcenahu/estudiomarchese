@@ -110,9 +110,9 @@
         </label>
       </nav>
     </header>
-    <div class="loader" id="loading" style="display: none"></div>
-    <main id="data" class="fade-in">
-      <div class="hero" id="hero">
+    <main>
+      <div class="loader" id="heroLoader" style="display: none"></div>
+      <div class="hero fade-in" id="hero">
         <img id="heroImage" src="" alt="Estudio Marchese y Asociados" />
         <div class="heroText">
           <h1 id="heroTitle"></h1>
@@ -138,11 +138,13 @@
           </a>
         </div>
       </div>
-      <div class="servicesContainer">
+      <div class="loader" id="servicesLoader" style="display: none"></div>
+      <div class="servicesContainer fade-in" id="servicesContainer">
         <h2 class="title">Nuestros Servicios</h2>
         <div id="services"></div>
       </div>
-      <div class="contactContainer">
+      <div class="loader" id="contactLoader" style="display: none"></div>
+      <div class="contactContainer fade-in" id="contactContainer">
         <h2 class="title">Contacto</h2>
         <p class="subtitle">¡Gracias por visitarnos!</p>
         <p>
