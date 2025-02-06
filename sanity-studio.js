@@ -40,6 +40,7 @@ const showOnPage = (content, colection) => {
       card.classList.add("card");
       if (window.innerWidth <= 1200) {
         const image = document.createElement("img");
+        image.loading = "lazy";
         image.classList.add("serviceImage");
         image.src = makeImgUrl(service.image.asset._ref);
         card.appendChild(image);
