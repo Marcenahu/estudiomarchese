@@ -22,7 +22,7 @@ function makeImgUrl(ref) {
   const id = parts[1];
   const dimentions = parts[2];
   const format = parts[3];
-  const optimizedSize = window.innerWidth <= 700 ? "&w=700" : "";
+  const optimizedSize = window.innerWidth <= 800 ? "&w=800" : "";
   return `https://cdn.sanity.io/images/${studioId}/${studioDataset}/${id}-${dimentions}.${format}?fm=webp${optimizedSize}`;
 }
 
