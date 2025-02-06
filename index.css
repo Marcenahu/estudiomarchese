@@ -365,7 +365,7 @@ svg path {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: var(--color-background);
+    background-color: #fff;
     -webkit-user-select: none;
     user-select: none;
     width: 4rem;
@@ -457,6 +457,7 @@ svg path {
   }
   .header {
     border-radius: 0;
+    border-right: none;
   }
   .hero {
     flex-direction: column;
