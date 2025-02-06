@@ -423,7 +423,7 @@ svg path {
     -webkit-font-smoothing: antialiased;
     transform-origin: 100% 0%;
     transform: translate(110%, 0%);
-    background-color: var(--color-background);
+    background-color: #fff;
     transition: transform 0.4s;
     overflow: clip;
     gap: 0.5rem;
