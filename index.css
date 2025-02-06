@@ -230,7 +230,8 @@ svg path {
   flex-direction: column;
   align-items: center;
   max-width: 30rem;
-  background-color: white;
+  color: var(--color-secondary);
+  border: var(--border);
   border-radius: 4rem;
   overflow: hidden;
 }
