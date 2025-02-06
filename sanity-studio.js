@@ -52,8 +52,7 @@ const writeOnPage = (content, writeOn) => {
     document.getElementById("heroSubtitle").innerHTML =
       content[0].result[0].subtitle;
     document.getElementById("heroImage").src = makeImgUrl(
-      content[0].result[0].image.asset._ref,
-      true
+      content[0].result[0].image.asset._ref
     );
     document.getElementById("heroImage").onload = function () {
       document.getElementById("heroLoader").style.display = "none";
@@ -132,11 +131,11 @@ renderOnPage();
 
 // utility functions
 
-function makeImgUrl(ref, reduced) {
+function makeImgUrl(ref) {
   const parts = ref.split("-");
   const id = parts[1];
   const dimentions = parts[2];
   const format = parts[3];
-  const optimizedSize = window.innerWidth <= 800 || reduced ? "&w=600" : "";
+  const optimizedSize = "&w=600";
   return `https://cdn.sanity.io/images/${studioId}/${studioDataset}/${id}-${dimentions}.${format}?fm=webp${optimizedSize}`;
 }
