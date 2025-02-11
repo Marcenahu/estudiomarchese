@@ -7,26 +7,20 @@ async function generateSite() {
 
     // Crear el directorio 'out' si no existe
     if (!fs.existsSync(outputDir)) {
+      console.log("Creando directorio /out");
       fs.mkdirSync(outputDir);
     }
 
-    // Contenido básico para el archivo HTML
-    const content = `
-      <html>
-        <head>
-          <title>Prueba de Generación Estática</title>
-        </head>
-        <body>
-          <h1>¡Hola, Lautaro! 🚀</h1>
-          <p>Este archivo fue generado automáticamente con generate.js.</p>
-        </body>
-      </html>
-    `;
+    // Copiar el archivo index.html existente a la carpeta 'out'
+    const sourceFile = path.join(__dirname, "index.html");
+    const destinationFile = path.join(outputDir, "index.html");
 
-    // Crear el archivo index.html en la carpeta 'out'
-    fs.writeFileSync(path.join(outputDir, "index.html"), content);
-
-    console.log("Archivo estático generado exitosamente en /out/index.html");
+    if (fs.existsSync(sourceFile)) {
+      fs.copyFileSync(sourceFile, destinationFile);
+      console.log("index.html copiado exitosamente a /out");
+    } else {
+      console.error("index.html no encontrado en la raíz del proyecto");
+    }
   } catch (error) {
     console.error("Error al generar el sitio:", error);
   }
