@@ -163,17 +163,18 @@ svg path {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4rem;
-  height: 5rem;
+  height: 4rem;
+  padding: 1rem 4rem;
   border-bottom: var(--border);
   border-right: var(--border);
   border-radius: 0 0 4rem 0;
 }
 .brand {
-  font-size: var(--font-medium);
+  font-size: 1.5rem;
   font-family: "Playfair Display", serif;
   font-weight: bold;
-  text-align: left;
+  text-align: center;
+  margin: 0;
 }
 .logoContainer {
   display: flex;
@@ -182,7 +183,7 @@ svg path {
   height: 100%;
 }
 .marcelo {
-  height: 5rem;
+  height: 4rem;
   width: auto;
 }
 .navBar {
@@ -330,7 +331,20 @@ svg path {
     --font-xlarge: 2rem;
   }
   .header {
-    padding: 0;
+    padding: 1rem;
+  }
+  .header .logoContainer {
+    display: grid;
+    grid-template-columns: 5rem auto 5rem;
+    grid-template-areas: "logo brand .";
+    width: 100%;
+  }
+  .marcelo {
+    grid-area: logo;
+  }
+  .brand {
+    align-self: center;
+    grid-area: brand;
   }
   .navBar {
     display: none;
@@ -459,5 +473,10 @@ svg path {
   .servicesContainer {
     padding: 1rem;
     border-radius: 4rem;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .brand {
+    font-size: 1rem;
   }
 }
