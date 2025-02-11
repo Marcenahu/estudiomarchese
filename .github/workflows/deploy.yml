@@ -1,34 +1,33 @@
-name: Test Static Site Generation and Deploy
+name: Deploy Website
 
 on:
   push:
     branches:
-      - main # Se ejecuta cada vez que haces push en la rama principal
+      - main
+  repository_dispatch:
+    types: [sanity_update]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: npm install @sanity/client
+        run: |
+          npm install
+          npm run build
 
-      - name: Generate static site
-        run: node generate.js
-
-      - name: List generated files
-        run: ls -R ./out
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages (for push)
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./out # Carpeta donde generaremos la salida
+          publish_dir: ./out
+          branch: gh-pages
+
+      - name: Deploy for Sanity update
+        if: github.event_name == 'repository_dispatch' && github.event.action == 'sanity_update'
+        run: echo "Running deploy for Sanity update..."
