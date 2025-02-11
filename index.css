@@ -330,7 +330,7 @@ svg path {
     --font-xlarge: 2rem;
   }
   .header {
-    padding: 0 1rem;
+    padding: 0;
   }
   .navBar {
     display: none;
