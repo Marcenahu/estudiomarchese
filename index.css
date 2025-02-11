@@ -170,7 +170,7 @@ svg path {
   border-radius: 0 0 4rem 0;
 }
 .brand {
-  font-size: var(--font-smaller);
+  font-size: var(--font-medium);
   font-family: "Playfair Display", serif;
   font-weight: bold;
   text-align: left;
@@ -182,9 +182,8 @@ svg path {
   height: 100%;
 }
 .marcelo {
-  height: 4rem;
+  height: 5rem;
   width: auto;
-  border-radius: 50%;
 }
 .navBar {
   display: flex;
