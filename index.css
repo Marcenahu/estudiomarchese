@@ -475,8 +475,3 @@ svg path {
     border-radius: 4rem;
   }
 }
-@media only screen and (max-width: 425px) {
-  .brand {
-    font-size: 1rem;
-  }
-}
