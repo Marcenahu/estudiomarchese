@@ -1,7 +1,11 @@
-// generate.js
 const fs = require("fs");
+const path = "./out";
 
-// Simulación de payload
+// Verificar si la carpeta "out" existe, si no, crearla
+if (!fs.existsSync(path)) {
+  fs.mkdirSync(path);
+}
+
 const payload = process.argv[2]
   ? JSON.parse(process.argv[2])
   : { text: "Contenido por defecto" };
@@ -23,5 +27,5 @@ const htmlContent = `
 </html>
 `;
 
-fs.writeFileSync("./out/index.html", htmlContent);
+fs.writeFileSync(`${path}/index.html`, htmlContent);
 console.log("Archivo index.html generado en la carpeta ./out");
