@@ -34,9 +34,7 @@ jobs:
           publish_branch: gh-pages # Rama donde se hará el deploy
 
       - name: Deploy for Sanity update
-        if: github.event_name == 'repository_dispatch' && github.event.action == 'sanity_update' # Solo se ejecuta en el evento de Sanity
+        if: github.event_name == 'repository_dispatch' && github.event.action == 'sanity_update'
         run: |
           echo "Running deploy for Sanity update..."
-          node generate.js "${{ github.event.client_payload }}"  # Ejecutar generate.js con los datos del POST
-          # Aquí puedes agregar otros pasos si es necesario para tu flujo de trabajo
-          # como, por ejemplo, copiar los archivos generados a la rama gh-pages.
+          node generate.js '${{ toJson(github.event.client_payload) }}'
