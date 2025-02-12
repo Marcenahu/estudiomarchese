@@ -28,12 +28,22 @@ jobs:
       - name: Generate HTML (for Sanity update)
         if: github.event_name == 'repository_dispatch' && github.event.action == 'sanity_update'
         run: |
-          echo "Running generate.js with client_payload..."
-          node generate.js '${{ toJson(github.event.client_payload) }}'
+          echo "Running generate.js"
+          node generate.js
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v2
         with:
-          personal_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ../gh-pages
-          publish_branch: gh-pages
+          ref: gh-pages
+
+      - name: Copy index.html from generated folder
+        run: |
+          cp ./generated/index.html ./index.html
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Update index.html from generated folder" || echo "No changes to commit"
+          git push origin gh-pages
