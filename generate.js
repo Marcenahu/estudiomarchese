@@ -1,30 +1,28 @@
+// generate.js
 const fs = require("fs");
-const path = require("path");
 
-// Crear la carpeta 'out' si no existe
-const outDir = path.join(__dirname, "out");
-if (!fs.existsSync(outDir)) {
-  fs.mkdirSync(outDir);
-}
+// Supón que recibes datos como un objeto
+const data = process.argv.slice(2)[0]; // Toma el primer argumento de la línea de comandos (que sería la información enviada)
+const parsedData = JSON.parse(data); // Parsear los datos si son en formato JSON
 
-// Generar el contenido del archivo HTML
-const htmlContent = `
+// Aquí iría el proceso para generar los archivos estáticos (por ejemplo, `index.html`)
+const outputPath = "./out/index.html";
+const content = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Page</title>
+  <title>Generated Site</title>
 </head>
 <body>
-  <h1>¡Test exitoso desde GitHub Actions! 🎉</h1>
-  <p>Este archivo fue generado automáticamente por <code>generate.js</code>.</p>
-  <p>Hora de generación: ${new Date().toLocaleString()}</p>
+  <h1>Generated Content</h1>
+  <p>${parsedData.text}</p> <!-- Usa los datos enviados en el POST -->
 </body>
 </html>
 `;
 
-// Escribir el archivo index.html en la carpeta 'out'
-fs.writeFileSync(path.join(outDir, "index.html"), htmlContent);
+fs.mkdirSync("./out", { recursive: true });
+fs.writeFileSync(outputPath, content);
 
-console.log("Archivo index.html generado con éxito en la carpeta ./out");
+console.log("Site generated!");
