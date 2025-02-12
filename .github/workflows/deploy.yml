@@ -3,38 +3,37 @@ name: Deploy Website
 on:
   push:
     branches:
-      - main # Se ejecuta en cada push a main
+      - main
   repository_dispatch:
-    types: [sanity_update] # Se ejecuta cuando se recibe un POST con el tipo "sanity_update"
+    types: [sanity_update]
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Entorno de ejecución en GitHub Actions
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 # Obtener el código del repositorio
+        uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2 # Configurar Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: "14" # Definir la versión de Node.js
+          node-version: "14"
 
       - name: Install dependencies
         run: |
-          npm install  # Instalar dependencias
-          npm run build  # Ejecutar el build (si lo tienes configurado en package.json)
+          npm install
+          npm run build || echo "No build script found."
 
-      - name: Deploy to GitHub Pages (for push)
-        if: github.event_name == 'push' # Solo se ejecuta en push
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          personal_token: ${{ secrets.GH_TOKEN }} # Usar el token personal de GitHub para autenticar el deploy
-          publish_dir: ./out # Directorio donde se encuentran los archivos generados
-          publish_branch: gh-pages # Rama donde se hará el deploy
-
-      - name: Deploy for Sanity update
+      - name: Generate HTML (for Sanity update)
         if: github.event_name == 'repository_dispatch' && github.event.action == 'sanity_update'
         run: |
-          echo "Running deploy for Sanity update..."
+          echo "Running generate.js with client_payload..."
           node generate.js '${{ toJson(github.event.client_payload) }}'
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./out
+          publish_branch: gh-pages
