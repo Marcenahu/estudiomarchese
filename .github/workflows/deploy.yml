@@ -20,17 +20,24 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install dependencies and build
+      - name: Clone gh-pages branch into dist
         run: |
-          npm install
-          mkdir dist
-          node generate.js > dist/index.html  # Genera el archivo index.html dentro de la carpeta dist
+          git clone --branch gh-pages https://github.com/${{ github.repository }} dist
+          cd dist
+          ls -la  # Verifica el contenido actual de dist
 
-      - name: Verify generated files
-        run: ls -la dist # Asegúrate de que index.html está en la carpeta dist
+      - name: Generate new index.html
+        run: |
+          node generate.js > dist/index.html
+          ls -la dist  # Verifica que index.html haya sido reemplazado
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # Publicamos el contenido de la carpeta dist
+      - name: Commit and push changes to gh-pages
+        run: |
+          cd dist
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update index.html and other static files" || echo "No changes to commit"
+          git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
