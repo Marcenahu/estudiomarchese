@@ -28,41 +28,42 @@ jobs:
       - name: Generate index.html
         run: |
           echo "Generating index.html..."
-          node generate.js  # Siempre genera el index.html
+          node generate.js  # Genera el archivo index.html
 
       - name: List files after generate.js
         run: ls -la # Verifica si index.html está presente
-
-      - name: Check git status
-        run: git status # Verifica el estado de git
-
-      - name: Force rebuild by modifying README
-        run: echo "Rebuild $(date)" >> README.md
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
         with:
           ref: gh-pages
 
-      - name: List files in gh-pages branch
-        run: ls -la # Verifica si el archivo index.html está presente en la rama gh-pages
+      - name: Copy index.html to gh-pages
+        run: |
+          echo "Copying index.html to gh-pages branch..."
+          cp ../index.html .  # Copia el archivo index.html desde la rama 'main'
 
-      - name: Check git status
-        run: git status # Verifica el estado de git
+      - name: List files in gh-pages branch
+        run: ls -la # Verifica que el archivo index.html esté presente en la rama gh-pages
 
       - name: Deploy index.html to gh-pages
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          if [ -f "index.html" ]; then
-            echo "index.html found. Removing it from Git's tracking."
-            git rm --cached index.html || true  # Usa --cached para que no elimine el archivo físico
-          fi
+          # Asegúrate de que estamos en la rama gh-pages
+          git checkout gh-pages
 
-          echo "Adding the new index.html to the commit."
+          # Verifica que el archivo index.html esté en el directorio antes de agregarlo
+          ls -la  # Verifica que index.html esté en el directorio antes de agregarlo
+
+          # Agrega el archivo index.html a git
           git add index.html
-          git commit --allow-empty -m "Force update of index.html"
+
+          # Realiza el commit
+          git commit -m "Deploy index.html to gh-pages"
+
+          # Empuja los cambios a la rama gh-pages
           git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
