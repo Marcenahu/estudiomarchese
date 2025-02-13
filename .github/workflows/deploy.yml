@@ -54,6 +54,12 @@ jobs:
             git rm --cached index.html || true  # Usa --cached para que no elimine el archivo físico
           fi
 
+          # Copiar el archivo index.html generado desde la raíz del repositorio
+          cp ../index.html .
+
+          # Verifica si index.html está ahora presente
+          ls -la
+
           echo "Adding the new index.html to the commit."
           git add index.html
           git commit --allow-empty -m "Force update of index.html"
