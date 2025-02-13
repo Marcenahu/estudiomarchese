@@ -1,4 +1,4 @@
-name: Deploy Website
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -8,11 +8,11 @@ on:
     types: [sanity_update]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout main branch
         uses: actions/checkout@v2
 
       - name: Setup Node.js
@@ -20,65 +20,17 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install dependencies
+      - name: Install dependencies and build
         run: |
           npm install
-          npm run build || echo "No build script found."
+          mkdir dist
+          node generate.js > dist/index.html  # Genera el archivo index.html dentro de la carpeta dist
 
-      - name: Generate index.html
-        run: |
-          echo "Generating index.html..."
-          node generate.js  # Esto genera el archivo index.html
-        working-directory: ./ # Asegúrate de estar en el directorio correcto
+      - name: Verify generated files
+        run: ls -la dist # Asegúrate de que index.html está en la carpeta dist
 
-      - name: List files after generate.js
-        run: ls -la # Verifica si index.html está presente
-
-      - name: Upload generated index.html as an artifact
-        uses: actions/upload-artifact@v3
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: generated-index
-          path: ./index.html # Subimos el archivo generado como artifact
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v2
-        with:
-          ref: gh-pages
-
-      - name: Download generated index.html from artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: generated-index # Descargar el artifact generado
-
-      - name: List files in gh-pages branch
-        run: ls -la # Verifica que estamos en la rama gh-pages
-
-      - name: Copy generated index.html to gh-pages
-        run: |
-          echo "Copying generated index.html to gh-pages branch..."
-          cp ./index.html ./  # Copiamos el archivo descargado a la rama gh-pages
-
-      - name: List files after copying
-        run: ls -la # Verifica que index.html esté presente en la rama gh-pages
-
-      - name: Deploy index.html to gh-pages
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Asegúrate de estar en la rama gh-pages
-          git checkout gh-pages
-
-          # Verifica que index.html esté en el directorio antes de agregarlo
-          ls -la  # Verifica que index.html esté presente en el directorio
-
-          # Agrega el archivo index.html a git
-          git add index.html
-
-          # Realiza el commit
-          git commit -m "Deploy index.html to gh-pages"
-
-          # Empuja los cambios a la rama gh-pages
-          git push origin gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # Publicamos el contenido de la carpeta dist
