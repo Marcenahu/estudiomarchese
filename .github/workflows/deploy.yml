@@ -30,19 +30,15 @@ jobs:
         run: |
           echo "Running generate.js"
           node generate.js
-          pwd
           ls -la ./ # Verificamos el contenido en el directorio raíz
 
-          - name: Checkout gh-pages branch
-          uses: actions/checkout@v2
-          with:
-            ref: gh-pages
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
 
       - name: Copy index.html to gh-pages branch
-        run: |
-          # Si el archivo ya está en el directorio raíz, simplemente no es necesario copiarlo de nuevo.
-          # Git debe reconocerlo si está presente.
-          cp ./index.html ./index.html  # Esto no es necesario, simplemente usa git add
+        run: git add index.html
 
       - name: Commit and push changes
         run: |
