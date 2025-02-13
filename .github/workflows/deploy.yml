@@ -39,10 +39,18 @@ jobs:
       - name: Copy index.html to gh-pages branch
         run: git add index.html
 
-      - name: Deploy changes
+      - name: Deploy index.html to gh-pages
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit --allow-empty -m "Force deploy"
-          git push
+
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+          git rm -f index.html  # Borra el archivo viejo
+          git add index.html    # Agrega el archivo nuevo
+
+          git commit -m "Update index.html"
+          git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
