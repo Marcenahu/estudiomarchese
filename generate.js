@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = "../gh-pages";
+const path = "./generated";
 const studioId = "q6gigotc";
 const studioDataset = "production";
 
