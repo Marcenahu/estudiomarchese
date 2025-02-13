@@ -31,8 +31,8 @@ jobs:
           echo "Running generate.js"
           node generate.js
 
-      - name: Display index.html content
-        run: cat index.html
+      - name: Force rebuild by modifying README
+        run: echo "Rebuild $(date)" >> README.md
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
