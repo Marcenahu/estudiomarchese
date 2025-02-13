@@ -34,15 +34,21 @@ jobs:
       - name: List files after generate.js
         run: ls -la # Verifica si index.html está presente
 
-      - name: Save index.html for later use
-        run: |
-          echo "Saving index.html to persistent directory..."
-          cp ./index.html ./generated_index.html  # Guardamos el archivo generado
+      - name: Upload generated index.html as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-index
+          path: ./index.html # Subimos el archivo generado como artifact
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
         with:
           ref: gh-pages
+
+      - name: Download generated index.html from artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: generated-index # Descargar el artifact generado
 
       - name: List files in gh-pages branch
         run: ls -la # Verifica que estamos en la rama gh-pages
@@ -50,7 +56,7 @@ jobs:
       - name: Copy generated index.html to gh-pages
         run: |
           echo "Copying generated index.html to gh-pages branch..."
-          cp ./generated_index.html ./index.html  # Copiamos el archivo guardado
+          cp ./index.html ./  # Copiamos el archivo descargado a la rama gh-pages
 
       - name: List files after copying
         run: ls -la # Verifica que index.html esté presente en la rama gh-pages
