@@ -36,33 +36,25 @@ jobs:
         with:
           ref: gh-pages
 
-      - name: Set up Git
+      - name: Deploy index.html to gh-pages
         run: |
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-      - name: Fetch gh-pages branch
-        run: |
-            git fetch origin gh-pages
-            git checkout gh-pages
-    
-      - name: List files (debugging)
-        run: ls -la
-    
-      - name: Remove old index.html
-        run: |
-            if [ -f "index.html" ]; then
-              git rm -f index.html
-            fi
-    
-      - name: Add updated index.html
-        run: git add index.html
-    
-      - name: Force commit (even if no changes detected)
-        run: git commit --allow-empty -m "Force update of index.html"
-    
-      - name: Push changes to gh-pages
-        run: git push origin gh-pages
-    
-      env:
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+          echo "Listing files in the current directory:"
+          ls -la
+
+          if [ -f "index.html" ]; then
+            echo "index.html found. Removing it from Git's tracking."
+            git rm --cached index.html || true  # Usa --cached para que no elimine el archivo físico
+          fi
+
+          echo "Adding the new index.html to the commit."
+          git add index.html
+          git commit --allow-empty -m "Force update of index.html"
+          git push origin gh-pages
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
