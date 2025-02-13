@@ -47,9 +47,12 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages
 
-          git rm -f index.html  # Borra el archivo viejo
-          git add index.html    # Agrega el archivo nuevo
+          if [ -f "index.html" ]; then
+            git rm -f index.html
+          fi
 
+          cp ../index.html ./  # Asegurate de que index.html esté en la ubicación correcta
+          git add index.html
           git commit -m "Update index.html"
           git push origin gh-pages
         env:
