@@ -19,6 +19,7 @@ const generateHtml = (data) => {
   const principal = data.filter((element) => element._type === "principal");
   const contact = data.filter((element) => element._type === "contact");
   const services = data.filter((element) => element._type === "services");
+  const brand = data.filter((element) => element._type === "brand");
 
   const htmlContent = `<!DOCTYPE html>
 <html lang="es">
@@ -29,7 +30,7 @@ const generateHtml = (data) => {
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" href="./favicon.ico" />
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-    <title>Estudio Marchese y Asociados</title>
+    <title>${brand[0].title}</title>
     <meta
       name="description"
       content="Estudio contable especializado en asesoramiento integral, impuestos y gestión financiera para empresas y profesionales. Soluciones confiables y personalizadas."
@@ -38,7 +39,7 @@ const generateHtml = (data) => {
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://estudiomarchese.ar" />
-    <meta property="og:title" content="Estudio Marchese y Asociados" />
+    <meta property="og:title" content=${brand[0].title} />
     <meta
       property="og:description"
       content="Estudio contable especializado en asesoramiento integral, impuestos y gestión financiera para empresas y profesionales. Soluciones confiables y personalizadas."
@@ -47,7 +48,7 @@ const generateHtml = (data) => {
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://estudiomarchese.ar/" />
-    <meta name="twitter:title" content="Estudio Marchese y Asociados" />
+    <meta name="twitter:title" content=${brand[0].title} />
     <meta
       name="twitter:description"
       content="Estudio contable especializado en asesoramiento integral, impuestos y gestión financiera para empresas y profesionales. Soluciones confiables y personalizadas."
@@ -61,11 +62,14 @@ const generateHtml = (data) => {
     <header class="header">
       <div class="logoContainer">
         <img
-          src="./icons/marcelo.jpg"
-          class="marcelo"
-          alt="Estudio Marchese y Asociados"
+          src=${makeImgUrl(brand[0].image.asset._ref)}
+          class="logo"
+          alt=${brand[0].title}
         />
-        <h2 class="brand">Estudio Marchese<br />& Asociados</h2>
+        <h2 class="brand">${brand[0].title.replace(
+          "Marchese",
+          "Marchese<br>"
+        )}</h2>
       </div>
       <nav class="navBar">
         <a href="#services">Servicios</a>
@@ -144,7 +148,7 @@ const generateHtml = (data) => {
       <div class="hero fade-in" id="hero">
         <img id="heroImage" src="${makeImgUrl(
           principal[0].image.asset._ref
-        )}" alt="Estudio Marchese y Asociados" />
+        )}" alt=${brand[0].title} />
         <div class="heroText">
           <h1 id="heroTitle">${principal[0].title}</h1>
           <p id="heroSubtitle">${principal[0].subtitle}</p>
@@ -239,12 +243,12 @@ const generateHtml = (data) => {
     <footer class="footer">
       <div class="logoContainer">
         <img
-          src="./icons/marcelo.jpg"
-          class="marcelo"
-          alt="Estudio Marchese y Asociados"
+          src=${makeImgUrl(brand[0].image.asset._ref)}
+          class="logo"
+          alt=${brand[0].title}
         />
         <h2 class="brand">
-          Estudio Marchese & Asociados © 2025. Todos los derechos reservados.
+          ${brand[0].title} © 2025. Todos los derechos reservados.
         </h2>
       </div>
       <p>
@@ -267,7 +271,7 @@ const fetchData = async () => {
   try {
     const response = await fetch(
       `https://${studioId}.api.sanity.io/v2021-10-21/data/query/${studioDataset}?query=${encodeURIComponent(
-        `*[_type == "principal" || _type == "services" || _type == "contact"]`
+        `*[_type == "principal" || _type == "services" || _type == "contact" || _type == "brand"]`
       )}`
     );
     const data = await response.json();
