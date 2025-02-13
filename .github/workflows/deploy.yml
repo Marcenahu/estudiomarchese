@@ -44,12 +44,18 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages
 
+          echo "Listing files in the current directory:"
+          ls -la
+
           if [ -f "index.html" ]; then
-            git rm -f index.html
+            echo "index.html found, removing and replacing it."
+            git rm -f index.html || true
+          else
+            echo "index.html not found. Proceeding to add the new one."
           fi
 
           git add index.html
-          git commit -m "Update index.html"
+          git commit -m "Update index.html" || echo "No changes to commit."
           git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
