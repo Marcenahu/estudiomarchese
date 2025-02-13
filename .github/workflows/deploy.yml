@@ -23,13 +23,13 @@ jobs:
       - name: Clone gh-pages branch into dist
         run: |
           git clone --branch gh-pages https://github.com/${{ github.repository }} dist
-          cd dist
-          ls -la  # Verifica el contenido actual de dist
+          ls -la dist  # Verifica el contenido actual de dist
 
       - name: Generate new index.html
         run: |
-          node generate.js > dist/index.html
-          ls -la dist  # Verifica que index.html haya sido reemplazado
+          node generate.js
+          cp ./index.html dist/index.html  # Copia el index.html generado a la carpeta dist
+          ls -la dist  # Verifica que index.html esté en dist
 
       - name: Commit and push changes to gh-pages
         run: |
