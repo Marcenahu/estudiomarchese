@@ -33,6 +33,9 @@ jobs:
       - name: List files after generate.js
         run: ls -la # Verifica si index.html está presente
 
+      - name: Check git status
+        run: git status # Verifica el estado de git
+
       - name: Force rebuild by modifying README
         run: echo "Rebuild $(date)" >> README.md
 
@@ -45,12 +48,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git fetch origin gh-pages
-          git checkout gh-pages
-
-          echo "Listing files in the current directory:"
-          ls -la
 
           if [ -f "index.html" ]; then
             echo "index.html found. Removing it from Git's tracking."
