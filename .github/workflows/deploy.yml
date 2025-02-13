@@ -28,35 +28,42 @@ jobs:
       - name: Generate index.html
         run: |
           echo "Generating index.html..."
-          node generate.js  # Genera el archivo index.html
+          node generate.js  # Esto genera el archivo index.html
 
       - name: List files after generate.js
         run: ls -la # Verifica si index.html está presente
+
+      - name: Save index.html for later use
+        run: |
+          echo "Saving index.html to persistent directory..."
+          cp ./index.html ./generated_index.html  # Guardamos el archivo generado en otro lugar
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
         with:
           ref: gh-pages
 
-      - name: Copy index.html to gh-pages
-        run: |
-          echo "Copying index.html to gh-pages branch..."
-          # Copia index.html desde el workspace (rama main) a gh-pages
-          cp ./index.html .  # Asegúrate de que el archivo está disponible antes de copiarlo
-
       - name: List files in gh-pages branch
-        run: ls -la # Verifica que el archivo index.html esté presente en la rama gh-pages
+        run: ls -la # Verifica que estamos en la rama gh-pages
+
+      - name: Copy generated index.html to gh-pages
+        run: |
+          echo "Copying generated index.html to gh-pages branch..."
+          cp ./generated_index.html ./index.html  # Copiamos el archivo guardado en la rama gh-pages
+
+      - name: List files after copying
+        run: ls -la # Verifica que index.html esté presente en la rama gh-pages
 
       - name: Deploy index.html to gh-pages
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Asegúrate de que estamos en la rama gh-pages
+          # Asegúrate de estar en la rama gh-pages
           git checkout gh-pages
 
-          # Verifica que el archivo index.html esté en el directorio antes de agregarlo
-          ls -la  # Verifica que index.html esté en el directorio antes de agregarlo
+          # Verifica que index.html esté en el directorio antes de agregarlo
+          ls -la  # Verifica que index.html esté presente en el directorio
 
           # Agrega el archivo index.html a git
           git add index.html
