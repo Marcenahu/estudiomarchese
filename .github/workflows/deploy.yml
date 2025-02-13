@@ -30,6 +30,9 @@ jobs:
           echo "Generating index.html..."
           node generate.js  # Siempre genera el index.html
 
+      - name: List files after generate.js
+        run: ls -la # Verifica si index.html está presente
+
       - name: Force rebuild by modifying README
         run: echo "Rebuild $(date)" >> README.md
 
