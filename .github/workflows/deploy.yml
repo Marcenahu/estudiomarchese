@@ -48,12 +48,11 @@ jobs:
           ls -la
 
           if [ -f "index.html" ]; then
-            echo "index.html found, removing and replacing it."
-            git rm -f index.html || true
-          else
-            echo "index.html not found. Proceeding to add the new one."
+            echo "index.html found. Removing it from Git's tracking."
+            git rm --cached index.html || true  # Usa --cached para que no elimine el archivo físico
           fi
 
+          echo "Adding the new index.html to the commit."
           git add index.html
           git commit -m "Update index.html" || echo "No changes to commit."
           git push origin gh-pages
