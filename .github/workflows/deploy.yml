@@ -30,6 +30,8 @@ jobs:
         run: |
           echo "Running generate.js"
           node generate.js
+          pwd
+          ls -la ./generated
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
