@@ -31,7 +31,7 @@ jobs:
           echo "Running generate.js"
           node generate.js
           pwd
-          ls -la ./ # Ahora verificamos directamente el directorio raíz
+          ls -la ./ # Verificamos el contenido en el directorio raíz
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
 
       - name: Copy index.html to gh-pages branch
         run: |
-          cp ./index.html ./index.html # Asegúrate de copiar directamente desde el directorio raíz
+          cp ./index.html ./index.html # No tiene sentido copiar el archivo sobre sí mismo
 
       - name: Commit and push changes
         run: |
