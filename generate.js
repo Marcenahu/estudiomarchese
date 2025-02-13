@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = "./generated";
+const path = ".";
 const studioId = "q6gigotc";
 const studioDataset = "production";
 

@@ -31,21 +31,21 @@ jobs:
           echo "Running generate.js"
           node generate.js
           pwd
-          ls -la ./generated
+          ls -la ./ # Ahora verificamos directamente el directorio raíz
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
         with:
           ref: gh-pages
 
-      - name: Copy index.html from generated folder
+      - name: Copy index.html to gh-pages branch
         run: |
-          cp ./generated/index.html ./index.html
+          cp ./index.html ./index.html # Asegúrate de copiar directamente desde el directorio raíz
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Update index.html from generated folder" || echo "No changes to commit"
+          git commit -m "Update index.html from root directory" || echo "No changes to commit"
           git push origin gh-pages
