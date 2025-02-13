@@ -29,6 +29,7 @@ jobs:
         run: |
           echo "Generating index.html..."
           node generate.js  # Esto genera el archivo index.html
+        working-directory: ./ # Asegúrate de estar en el directorio correcto
 
       - name: List files after generate.js
         run: ls -la # Verifica si index.html está presente
@@ -36,7 +37,7 @@ jobs:
       - name: Save index.html for later use
         run: |
           echo "Saving index.html to persistent directory..."
-          cp ./index.html ./generated_index.html  # Guardamos el archivo generado en otro lugar
+          cp ./index.html ./generated_index.html  # Guardamos el archivo generado
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
@@ -49,7 +50,7 @@ jobs:
       - name: Copy generated index.html to gh-pages
         run: |
           echo "Copying generated index.html to gh-pages branch..."
-          cp ./generated_index.html ./index.html  # Copiamos el archivo guardado en la rama gh-pages
+          cp ./generated_index.html ./index.html  # Copiamos el archivo guardado
 
       - name: List files after copying
         run: ls -la # Verifica que index.html esté presente en la rama gh-pages
