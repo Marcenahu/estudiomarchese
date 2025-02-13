@@ -41,7 +41,8 @@ jobs:
       - name: Copy index.html to gh-pages
         run: |
           echo "Copying index.html to gh-pages branch..."
-          cp ../index.html .  # Copia el archivo index.html desde la rama 'main'
+          # Copia index.html desde el workspace (rama main) a gh-pages
+          cp ./index.html .  # Asegúrate de que el archivo está disponible antes de copiarlo
 
       - name: List files in gh-pages branch
         run: ls -la # Verifica que el archivo index.html esté presente en la rama gh-pages
