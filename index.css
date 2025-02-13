@@ -150,7 +150,7 @@ svg path {
   gap: 1rem;
   height: 100%;
 }
-.marcelo {
+.logo {
   height: 4rem;
   width: auto;
 }
@@ -307,7 +307,7 @@ svg path {
     grid-template-areas: "logo brand .";
     width: 100%;
   }
-  .marcelo {
+  .logo {
     grid-area: logo;
   }
   .brand {
