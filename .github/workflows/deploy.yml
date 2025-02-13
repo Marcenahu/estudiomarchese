@@ -25,11 +25,10 @@ jobs:
           npm install
           npm run build || echo "No build script found."
 
-      - name: Generate HTML (for Sanity update)
-        if: github.event_name == 'repository_dispatch' && github.event.action == 'sanity_update'
+      - name: Generate index.html
         run: |
-          echo "Running generate.js"
-          node generate.js
+          echo "Generating index.html..."
+          node generate.js  # Siempre genera el index.html
 
       - name: Force rebuild by modifying README
         run: echo "Rebuild $(date)" >> README.md
