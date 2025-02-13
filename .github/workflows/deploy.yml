@@ -31,6 +31,9 @@ jobs:
           echo "Running generate.js"
           node generate.js
 
+      - name: Display index.html content
+        run: cat index.html
+
       - name: Checkout gh-pages branch
         uses: actions/checkout@v2
         with:
