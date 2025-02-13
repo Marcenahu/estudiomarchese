@@ -39,6 +39,9 @@ jobs:
       - name: Copy index.html to gh-pages branch
         run: git add index.html
 
+      - name: Check current directory
+        run: ls -la
+
       - name: Deploy index.html to gh-pages
         run: |
           git config --global user.name "github-actions[bot]"
