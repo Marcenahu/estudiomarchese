@@ -35,7 +35,7 @@ jobs:
         run: ls -la # Verifica si index.html está presente
 
       - name: Upload generated index.html as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: generated-index
           path: ./index.html # Subimos el archivo generado como artifact
@@ -46,7 +46,7 @@ jobs:
           ref: gh-pages
 
       - name: Download generated index.html from artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: generated-index # Descargar el artifact generado
 
